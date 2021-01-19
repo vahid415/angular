@@ -11,7 +11,7 @@ const routes: Routes = [{
   component: ChartsComponent,
   children: [{
     path: 'echarts',
-    component: EchartsComponent,
+    // component: EchartsComponent,
   }, {
     path: 'd3',
     component: D3Component,
