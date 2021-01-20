@@ -4,11 +4,10 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
 import { Component, OnInit } from '@angular/core';
-import { AnalyticsService } from './@core/utils/analytics.service';
-import { SeoService } from './@core/utils/seo.service';
+import { AnalyticsService, SeoService } from './@core/infra/shared/services';
 
 @Component({
-  selector: 'ngx-app',
+  selector: 'app-root',
   template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {

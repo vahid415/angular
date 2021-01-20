@@ -8,50 +8,20 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
 import {
   AnalyticsService,
   LayoutService,
-  PlayerService,
   SeoService,
   StateService,
-} from './utils';
-import { UserData } from './data/users';
-import { ElectricityData } from './data/electricity';
-import { SmartTableData } from './data/smart-table';
-import { UserActivityData } from './data/user-activity';
-import { OrdersChartData } from './data/orders-chart';
-import { ProfitChartData } from './data/profit-chart';
-import { TrafficListData } from './data/traffic-list';
-import { EarningData } from './data/earning';
-import { OrdersProfitChartData } from './data/orders-profit-chart';
-import { TrafficBarData } from './data/traffic-bar';
-import { ProfitBarAnimationChartData } from './data/profit-bar-animation-chart';
-import { TemperatureHumidityData } from './data/temperature-humidity';
-import { SolarData } from './data/solar';
-import { TrafficChartData } from './data/traffic-chart';
-import { StatsBarData } from './data/stats-bar';
-import { CountryOrderData } from './data/country-order';
-import { StatsProgressBarData } from './data/stats-progress-bar';
-import { VisitorsAnalyticsData } from './data/visitors-analytics';
-import { SecurityCamerasData } from './data/security-cameras';
+} from './infra/shared/services';
+import { UserService } from './infra/shared/mock/users.service';
+import { UserData } from './infra/shared/data/users';
+import { MockDataModule } from './infra/shared/mock/mock-data.module';
+import { InfraComponentsModule } from './infra/components/mcb/infra-components.module';
+import { DxComponentsModule } from './infra/components/devextreme/dx.module';
+import { CommonCoreModule } from './infra/shared/common-core.module';
+import { FakeAuthenticationProviderModule } from './portal/security/authentication/providers/fake-authentication-provider/fake-authentication-provider.module';
+import { DefaultAuthenticationProviderModule } from './portal/security/authentication/providers/default-authentication-provider/default-authentication-provider.module';
+import { Environment } from './public-api';
+import { environment } from 'environments/environment';
 
-import { UserService } from './mock/users.service';
-import { ElectricityService } from './mock/electricity.service';
-import { SmartTableService } from './mock/smart-table.service';
-import { UserActivityService } from './mock/user-activity.service';
-import { OrdersChartService } from './mock/orders-chart.service';
-import { ProfitChartService } from './mock/profit-chart.service';
-import { TrafficListService } from './mock/traffic-list.service';
-import { EarningService } from './mock/earning.service';
-import { OrdersProfitChartService } from './mock/orders-profit-chart.service';
-import { TrafficBarService } from './mock/traffic-bar.service';
-import { ProfitBarAnimationChartService } from './mock/profit-bar-animation-chart.service';
-import { TemperatureHumidityService } from './mock/temperature-humidity.service';
-import { SolarService } from './mock/solar.service';
-import { TrafficChartService } from './mock/traffic-chart.service';
-import { StatsBarService } from './mock/stats-bar.service';
-import { CountryOrderService } from './mock/country-order.service';
-import { StatsProgressBarService } from './mock/stats-progress-bar.service';
-import { VisitorsAnalyticsService } from './mock/visitors-analytics.service';
-import { SecurityCamerasService } from './mock/security-cameras.service';
-import { MockDataModule } from './mock/mock-data.module';
 
 const socialLinks = [
   {
@@ -73,24 +43,6 @@ const socialLinks = [
 
 const DATA_SERVICES = [
   { provide: UserData, useClass: UserService },
-  { provide: ElectricityData, useClass: ElectricityService },
-  { provide: SmartTableData, useClass: SmartTableService },
-  { provide: UserActivityData, useClass: UserActivityService },
-  { provide: OrdersChartData, useClass: OrdersChartService },
-  { provide: ProfitChartData, useClass: ProfitChartService },
-  { provide: TrafficListData, useClass: TrafficListService },
-  { provide: EarningData, useClass: EarningService },
-  { provide: OrdersProfitChartData, useClass: OrdersProfitChartService },
-  { provide: TrafficBarData, useClass: TrafficBarService },
-  { provide: ProfitBarAnimationChartData, useClass: ProfitBarAnimationChartService },
-  { provide: TemperatureHumidityData, useClass: TemperatureHumidityService },
-  { provide: SolarData, useClass: SolarService },
-  { provide: TrafficChartData, useClass: TrafficChartService },
-  { provide: StatsBarData, useClass: StatsBarService },
-  { provide: CountryOrderData, useClass: CountryOrderService },
-  { provide: StatsProgressBarData, useClass: StatsProgressBarService },
-  { provide: VisitorsAnalyticsData, useClass: VisitorsAnalyticsService },
-  { provide: SecurityCamerasData, useClass: SecurityCamerasService },
 ];
 
 export class NbSimpleRoleProvider extends NbRoleProvider {
@@ -140,7 +92,6 @@ export const NB_CORE_PROVIDERS = [
   },
   AnalyticsService,
   LayoutService,
-  PlayerService,
   SeoService,
   StateService,
 ];
@@ -148,11 +99,18 @@ export const NB_CORE_PROVIDERS = [
 @NgModule({
   imports: [
     CommonModule,
+    environment.useFakeAuthenticationProvider ? FakeAuthenticationProviderModule : DefaultAuthenticationProviderModule,
   ],
   exports: [
     NbAuthModule,
+    CommonCoreModule,
+    // DxComponentsModule,
+    // InfraComponentsModule,
   ],
   declarations: [],
+  providers: [
+    // { provide: Environment, useValue: environment },
+    ]
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
@@ -164,6 +122,7 @@ export class CoreModule {
       ngModule: CoreModule,
       providers: [
         ...NB_CORE_PROVIDERS,
+        // { provide: Environment, useValue: environment },
       ],
     };
   }

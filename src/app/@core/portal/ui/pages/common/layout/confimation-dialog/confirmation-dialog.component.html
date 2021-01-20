@@ -1,0 +1,8 @@
+<dx-popup *ngIf="showDialog" [title]="title" [width]="350" (close)="reject()">
+  {{text}}
+  <dx-toolbar>
+    <dx-button class="mcb-confirm-btn" [icon]="'fa fa-check-circle'" (click)="accept()">بلی
+    </dx-button>
+    <dx-button class="mcb-confirm-btn" [icon]="'fa fa-times-circle'" (click)="reject()"> خیر</dx-button>
+  </dx-toolbar>
+</dx-popup>

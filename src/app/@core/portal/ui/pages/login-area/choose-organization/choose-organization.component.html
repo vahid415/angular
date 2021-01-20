@@ -1,0 +1,23 @@
+<h3 class="login-title">انتخاب سازمان</h3>
+<div style="width: 60%; margin: auto;">
+  <p class="text-justify">
+    به شما در چندین سازمان نقش اعطا شده است.
+    با کدام سازمان وارد سامانه می شوید؟
+  </p>
+  <form #form="ngForm" mcbForm (do)="login()" autocomplete="off">
+    <label class="userName login-form-control">
+      <i class="fa fa-user login-user-icon"></i>
+      <dx-drop-down-box class="drop-down" name="selectedOrg" [dataSource]="orgs" [required]="true"
+                          [(ngModel)]="selectedOrg" textField="title" valueField="id"
+                          (valueChange)="$event.id ? this.selectedOrg = $event : this.selectedOrg = null">
+      </dx-drop-down-box>
+    </label>
+    <dx-button type="submit" class="login-btn w-100 mt-3"
+            [disabled]="form.invalid">{{'submit'| translator}}</dx-button>
+    <div class="exit mt-3">
+      <a class="logOut-icon fas ml-2 fa-arrow-right"></a>
+      <span style="color: #5e5b5b; font-weight: 500; cursor: pointer;"
+            routerLink="..">{{'applicationExit'| translator}}</span>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,55 @@
+<dx-data-grid
+  #detailGridItem
+  (onToolbarPreparing)="onDataGridToolbarPreparing($event)"
+  [dataSource]="detailGridDataSource"
+  [focusedRowEnabled]="true"
+  [rowAlternationEnabled]="true"
+  [rtlEnabled]="true"
+  [showBorders]="true"
+  [columns]="controller.detailFormModel.detailGridColumnsModel"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  repaintChangesOnly="true"
+  width="100%"
+  style="margin-top: 10px"
+  wordWrapEnabled="true">
+  <dxo-export [allowExportSelectedData]="true" [enabled]="true"
+              [fileName]="controller.detailFormModel.exportFileName"></dxo-export>
+  <dxo-selection mode="multiple"></dxo-selection>
+  <dxo-editing>
+    <dxo-texts [confirmDeleteMessage]="confirmDeleteMessage"></dxo-texts>
+  </dxo-editing>
+
+  <div *dxTemplate="let d of 'operationsCellTemplate'">
+    <ng-template [ngTemplateOutlet]="operationsTemplate || defaultTemplate"
+                 [ngTemplateOutletContext]="{row: d}"></ng-template>
+  </div>
+  <dxo-remote-operations
+    [filtering]="true"
+    [grouping]="true"
+    [paging]="true"
+    [sorting]="true">
+  </dxo-remote-operations>
+  <dxo-paging [pageSize]="7"></dxo-paging>
+  <dxo-pager
+    [allowedPageSizes]="[10, 20, 40, 100]"
+    [showPageSizeSelector]="true">
+  </dxo-pager>
+</dx-data-grid>
+
+<ng-template #defaultTemplate let-item="row">
+  <dx-button (onClick)="editSelectedDetail(item.data)" class="yekan" icon="edit" name="edit"
+             rtlEnabled="true" nbTooltip="ویرایش"></dx-button>
+  <dx-button (onClick)="deleteSelectedDetail(item.data)" class="yekan" icon="remove" name="delete"
+             rtlEnabled="true" nbTooltip="حذف"></dx-button>
+</ng-template>
+
+<rnx-core-tab-panel #detailEntityEditDialog (onSave)="saveDetailEntity($event)"
+                    (onShowHelp)="showHelpIntro($event)" [showHelp]="controller.detailFormModel.showPopUpHelp"
+                    [saveDisabled]="!controller.entityDetailEditForm.form.valid" showSave="true">
+  <div popup-body>
+    <ng-content select="[detail-edit-items]"></ng-content>
+  </div>
+</rnx-core-tab-panel>
+
+

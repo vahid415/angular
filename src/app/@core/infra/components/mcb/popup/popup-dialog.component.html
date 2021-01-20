@@ -1,0 +1,74 @@
+<dx-popup
+  #cap
+  (onInitialized)="onInit($event)"
+  (onHidden)="closeDialog($event)"
+  [(visible)]="visible"
+  [fullScreen]="fullscreen"
+  [title]="title"
+  [width]="width"
+  [height]="height"
+  height="auto"
+  rtlEnabled="true"
+  titleTemplate="title">
+  <div *dxTemplate="let data of 'title'">
+    <dx-toolbar class="tool-bar">
+      <!-- <dxi-item locateInMenu="auto" location="after" style="padding: 0px">
+        <dx-button
+          (onClick)="onShowHelpClicked($event)"
+          *ngIf="showHelp"
+          id="product1"
+          [hint]="'general.help' | translate"
+          class="yekan"
+          icon="help"
+          rtlEnabled="true"
+          style="margin-left: 5px"
+          type="danger">
+        </dx-button>
+      </dxi-item> -->
+      <dxi-item locateInMenu="auto" location="after" style="padding: 0px">
+        <dx-button
+          (onClick)="onSaveClicked($event)"
+          *ngIf="showSave"
+          id="product2"
+          [hint]="'general.saveUpdate' | translate"
+          class="yekan"
+          icon="save"
+          rtlEnabled="true"
+          style="margin-left: 5px"
+          [disabled]="saveDisabled"
+          type="success">
+        </dx-button>
+      </dxi-item>
+      <dxi-item locateInMenu="auto" location="after" style="padding: 0px">
+        <dx-button
+          (onClick)="closeDialog($event)"
+          [hint]="'general.back' | translate"
+          class="yekan"
+          icon="close"
+          id="product3"
+          *ngIf="showClose"
+          rtlEnabled="true"
+          type="back">
+        </dx-button>
+      </dxi-item>
+      <dxi-item locateInMenu="never" location="before" style="padding: 0px">
+        <i [className]="icon + ' icons yekan'"></i>
+        <label class="yekan">{{title}}</label>
+      </dxi-item>
+    </dx-toolbar>
+  </div>
+
+  <div *dxTemplate="let data of 'content'" style="text-align: right">
+    <dx-scroll-view #scrollView
+                    bounceEnabled="false"
+                    [disabled]="disableScroll"
+                    height="100%"
+                    id="scrollview"
+                    rtlEnabled="true"
+                    scrollByContent="true"
+                    scrollByThumb="true"
+                    showScrollbar="onScroll">
+      <ng-content select="[popup-body]"></ng-content>
+    </dx-scroll-view>
+  </div>
+</dx-popup>

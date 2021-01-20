@@ -1,0 +1,112 @@
+<div class="card">
+  <div class="card-header">
+    <dx-toolbar class="tool-bar">
+      <dxi-item locateInMenu="auto" location="after" style="padding: 0px">
+        <dx-button
+          (onClick)="showMasterGridPageHelp($event)"
+          class="yekan"
+          icon="help"
+          rtlEnabled="true"
+          type="danger">
+        </dx-button>
+      </dxi-item>
+      <dxi-item locateInMenu="never" location="before" style="padding: 0px">
+        <label class="yekan font-weight-bold">
+          {{controller.masterFormModel.title}}
+        </label>
+      </dxi-item>
+    </dx-toolbar>
+  </div>
+  <div class="card-body">
+    <ng-content select="[search-items]"></ng-content>
+    <div class="row" style="margin-top: 10px" *ngIf="controller.masterFormModel.showAdvancedSearch">
+      <div class="col-md-12">
+        <rnx-advanced-search>
+          <ng-content class="advanced-search-item" select="[advanced-search-items]"></ng-content>
+        </rnx-advanced-search>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+      <div class="col-md-4 col-sm-12">
+        <dx-button
+          (onClick)="searchMasterEntity()"
+          [text]="'general.search' | translate"
+          class="yekan"
+          icon="search"
+          id="courseListSearchBtnId"
+          rtlEnabled="false"
+          type="success">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+  <!--<div base-class="card-footer">Footer</div>-->
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <dx-data-grid
+          #dataGridComponent
+          id="masterFormDataTableId"
+          [focusedRowEnabled]="true"
+          repaintChangesOnly="true"
+          wordWrapEnabled="true"
+          [showColumnLines]="true"
+          [showRowLines]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onDataGridToolbarPreparing($event)"
+          [rowAlternationEnabled]="true"
+          [columns]="controller.masterFormModel.masterGridColumnsModel"
+          [dataSource]="gridDataSource">
+          <dxo-export [enabled]="true" [fileName]="controller.masterFormModel.exportFileName"
+                      [allowExportSelectedData]="true"></dxo-export>
+          <dxo-selection mode="multiple"></dxo-selection>
+          <dxo-editing>
+            <dxo-texts [confirmDeleteMessage]="confirmDeleteMessage"></dxo-texts>
+          </dxo-editing>
+          <div *dxTemplate="let d of 'operationsCellTemplate'">
+            <ng-template [ngTemplateOutlet]="operationsTemplate || defaultTemplate"
+                         [ngTemplateOutletContext]="{row: d}"></ng-template>
+          </div>
+          <dxo-remote-operations
+            [filtering]="true"
+            [sorting]="true"
+            [grouping]="true"
+            [paging]="true">
+          </dxo-remote-operations>
+          <dxo-paging [pageSize]="5"></dxo-paging>
+          <dxo-pager
+            [showPageSizeSelector]="true"
+            [allowedPageSizes]="[10, 20, 40, 100]">
+          </dxo-pager>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #defaultTemplate let-item="row">
+  <dx-button rtlEnabled="true" icon="edit" class="yekan" name="edit"
+             (onClick)="editSelectedMaster(item.data)" *ngIf="!openInPopUp">
+  </dx-button>
+  <dx-button rtlEnabled="true" icon="remove" class="yekan" name="delete"
+             (onClick)="deleteSelectedMaster(item.data)" *ngIf="!openInPopUp">
+  </dx-button>
+  <dx-button rtlEnabled="true" icon="check" class="yekan" name="select"
+             (onClick)="selectEntityInPopupMode(item.data)" *ngIf="openInPopUp">
+  </dx-button>
+</ng-template>
+
+<rnx-core-tab-panel #addEditDialog (onSave)="saveMasterEntity($event)"
+                    [fullscreen]="controller.masterFormModel.editPopUpConfig.fullScreen"
+                    [width]="controller.masterFormModel.editPopUpConfig.width"
+                    (onShowHelp)="showPopUpHelp($event)" [showHelp]="controller.masterFormModel.showPopUpHelp"
+                    [saveDisabled]="!controller.entityMasterEditForm.form.valid" showSave="true">
+  <div popup-body>
+    <!-- Edit Items -->
+    <ng-content select="[master-edit-items]"></ng-content>
+    <ng-content select="[master-edit-detail-tabs]"
+                *ngIf="controller.masterFormModel.detailTabs.length != 0"></ng-content>
+  </div>
+</rnx-core-tab-panel>
