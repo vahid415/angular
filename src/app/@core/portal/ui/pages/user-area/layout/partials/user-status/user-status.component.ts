@@ -81,7 +81,7 @@ export class PortalUserAreaUserStatusComponent implements OnInit, OnDestroy {
     });
     this.menuServiceSubscription = this.menuService.onItemClick()
       .pipe(
-        filter(({ tag }) => tag === 'user-header-context-menu')
+        filter(({ tag }) => tag === 'user-header-context-menu'),
       )
       .subscribe(menu => {
         this.messageBusGroup.emit(new MenuClickEvent(menu[ 'item' ].data));
